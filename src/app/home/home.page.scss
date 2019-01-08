@@ -2,3 +2,30 @@
   max-height: 35vh;
   overflow: hidden;
 }
+
+
+.vertical-align-content > *
+{
+     display: flex!important;
+     align-content: center!important;
+     align-items: center!important;
+     margin-left:20%;
+     margin-right:20%;
+    
+}
+
+.bakcgroundColor{
+    background-color: #1B7569;
+}
+
+.roundedBorder{
+    background-color: #1B7569;
+    color : white;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
+.margintop20{
+    margin-top: 10%;
+}

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Partie, Joueur, Manche, Definition, Mot } from '../interfaces/parties';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 
 @Component({
@@ -25,15 +26,27 @@ export class HomePage {
     public voteSelectedPlayerPos = -1;
 
     public zone_a_afficher = 'new_game';
+    clearTimeOutDuCul = null;
 
+    /*
+    TODO : 
+    - splash screen
+    - <!-- A afficher 2 secondes, full screen, quand la partie commence-->
+    <ion-img src="/assets/9.jpg" style="height: 10%;width: 10%" *ngIf="false"></ion-img>
+    - attribution d'une couleur à chaque joueur (a chaque fois)
+    - manche suivante à centré au tableau
+    - si joueur trop long à répondre : playAudio
+    */
+    
     // ______________________________________________________________________________
-    constructor() {
+    constructor(private splashScreen: SplashScreen) {
         this.Initialisation.call(this);
     }
 
 
     // ______________________________________________________________________________
     Initialisation() {
+        this.splashScreen.show();
         const mot = <Mot>{};
         mot.id = 1;
         mot.nom = 'Maison';
@@ -60,17 +73,17 @@ export class HomePage {
 
         const joueur1 = <Joueur>{};
         joueur1.id = 1;
-        joueur1.nom = 'Test1';
+        joueur1.nom = 'Joueur 1';
         joueur1.points = 0;
 
         const joueur2 = <Joueur>{};
         joueur2.id = 2;
-        joueur2.nom = 'Test2';
+        joueur2.nom = 'Joueur 2';
         joueur2.points = 0;
 
         const joueur3 = <Joueur>{};
         joueur3.id = 3;
-        joueur3.nom = 'Test3';
+        joueur3.nom = 'Joueur 3';
         joueur3.points = 0;
 
         newPartie.joueurs.push(joueur1);
@@ -142,6 +155,9 @@ export class HomePage {
     // ______________________________________________________________________________
     // Appelé aprés le MJ et aprés chaque joueur
     public JoueurSuivant() {
+        this.clearTimeOutDuCul = setTimeout(()=>{ this.playAudio(); }, 1000);
+        
+        
         let selected = false;
         this.Parties[this.currentPartie].joueurs.forEach((joueur, index) => {
             // Si l'id du joueur != id mj et si > 0 id en cours
@@ -166,6 +182,16 @@ export class HomePage {
         }
     }
 
+    
+    // ______________________________________________________________________________
+    public playAudio(){
+      console.log("playAudio");
+      let audio = new Audio();
+      audio.src = "../../assets/TINTIN.wav";
+      audio.load();
+      audio.play();
+    }
+    
     // ______________________________________________________________________________
     public Vote() {
         this.zone_a_afficher = 'vote';
@@ -228,7 +254,7 @@ export class HomePage {
               // Si il a voté pour quelqu'un d'autre
               // On récup l'index de l'autre joueur
               const indexJoueur2 = this.FindInPlayer(def.idJoueur);
-              this.Parties[this.currentPartie].joueurs[indexJoueur2].points += 1;
+              this.Parties[this.currentPartie].joueurs[indexJoueur2].points += 2;
             }
           });
         });
