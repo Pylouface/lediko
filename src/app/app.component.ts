@@ -3,6 +3,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Partie, Joueur, Manche, Definition } from './interfaces/parties';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-root',

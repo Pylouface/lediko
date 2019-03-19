@@ -8,6 +8,7 @@ export interface Joueur {
     id:     number;
     nom:    string;
     points: number;
+    couleur: string;
 }
 
 export interface Manche {

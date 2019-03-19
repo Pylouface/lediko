@@ -1,164 +1,205 @@
-<ion-content *ngIf="zone_a_afficher == 'new_game'" center text-center class="vertical-align-content bakcgroundColor">
-    <ion-card class="welcome-card">
-      <ion-img src="/assets/8_2.png"></ion-img>
-    </ion-card>
-    <ion-item *ngFor="let player of Parties[currentPartie].joueurs">
-        <ion-input required type="text" placeholder="Nouveau joueur" [(ngModel)]="player.nom" class="roundedBorder"></ion-input>
-    </ion-item>
-    <ion-item></ion-item>
-    <ion-button shape="round" color="info" fill="outline" (click)="NewPlayer()">+</ion-button>
-    <ion-item></ion-item>
-    <ion-button shape="round" color="primary" fill="outline" (click)="NewRound()">Commencer</ion-button>    
-</ion-content>
+<div class="bg-image container">
+    <div *ngIf="zone_a_afficher == 'new_game'">
+         <div class="row">
+             <div class="col text-center my-auto">
+                <img src="/assets/menu_new.png" alt="titre" class="img-fluid"/>
+             </div>
+        </div>
+        <div class="row" *ngFor="let player of Parties[currentPartie].joueurs">
+            <div class="col text-center">
+                <!--<ion-input required type="text" placeholder="Nouveau joueur" [(ngModel)]="player.nom" class="roundedBorder"></ion-input>-->
+                <input required type="text" placeholder="Nouveau joueur" [(ngModel)]="player.nom" class="roundedBorder"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <br>
+                <ion-button strong=true shape="round" color="light" fill="outline" (click)="NewPlayer()" [disabled]="Parties[currentPartie].joueurs.length>6">+</ion-button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <br>
+                <ion-button strong=true shape="round" color="light" fill="outline" (click)="NewRound()">Commencer</ion-button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div *ngIf="zone_a_afficher == 'DUCUL'" style="margin-top: 50vh; transform: translateY(-50%);">
+        <div class="row">
+          <div class="col text-center">
+                <div class="text-blur-out tracking-in-contract" style="color:white">
+                    <h1 style="color:white;font-size:56px">Manche {{currentManche}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div *ngIf="zone_a_afficher == 'maitre_du_jeu'" style="margin-top: 50vh; transform: translateY(-50%);">
+      <div class="row">
+        <div class="col text-center">
+            <h2 style="color:white">{{Parties[currentPartie].joueurs[currentMjpos].nom}}</h2>
+            <h2 style="color:white">Tu es le maitre du jeu !</h2>
+            <br>
+            <ion-button strong=true shape="round" color="light" fill="outline" (click)="VersLaSelectionDuProchainMot()">Continuer</ion-button>
+          </div>
+        </div>
+    </div>
+    
+
+    <div *ngIf="zone_a_afficher == 'validation_mot'" style="margin-top: 50vh; transform: translateY(-50%);">
+      <div class="row">
+          <div class="col text-center">
+            <h2 style="color:white">Le mot sera ...</h2>              
+              <h2 style="color:white"><b>{{ListeDeMots[CurrentlocationMot].nom}}</b></h2>
+              <br>
+            <ion-button strong=true shape="round" color="success" fill="outline" (click)="ValideMot()">Valider</ion-button>  
+            <ion-button strong=true shape="round" color="light" fill="outline" (click)="AleatoireMot()">Aléatoire</ion-button>
+          </div>
+        </div>
+    </div>
+
+    <div *ngIf="zone_a_afficher == 'player_actif'" style="margin-top: 50vh; transform: translateY(-50%);">
+      <div class="row">
+          <div class="col text-center">
+            <h2 style="color:white">{{Parties[currentPartie].joueurs[currentPlayerPos].nom}}</h2>
+            <h2 style="color:white">A toi de jouer !</h2>
+              <br>
+            <ion-button strong=true shape="round" color="light" fill="outline" (click)="DisplayTextArea()">OK</ion-button>          
+          </div>
+        </div>
+    </div>
 
 
-<ion-grid *ngIf="zone_a_afficher == 'maitre_du_jeu'" style="height: 100%">  
-  <ion-row justify-content-center align-items-center style="height: 100%">
-    <ion-col>
-        <h2>{{Parties[currentPartie].joueurs[currentMjpos].nom}}</h2>
-        <h2>Tu es le maitre du jeu !</h2>
-        <ion-button shape="round" color="info" fill="outline" (click)="VersLaSelectionDuProchainMot()">Continuer</ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <div *ngIf="zone_a_afficher == 'text_area'" style="margin-top: 50vh; transform: translateY(-50%);">  
+      <div class="row">
+        <div class="col text-center">
+            <h2 style="color:white">{{Parties[currentPartie].joueurs[currentPlayerPos].nom}}</h2>
+            <h2 style="color:white">Donnez la définition du mot : <b>{{ListeDeMots[CurrentlocationMot].nom}}</b></h2>
+            <br>
+            <textarea style="width:80%;border-radius:15px;" placeholder="Définition" type="text" [(ngModel)]="Parties[currentPartie].manches[currentManche-1].definitions[currentDefinition].definition"></textarea>
+            <br>
+            <br>
+            <ion-button strong=true shape="round" color="warning" fill="outline" (click)="JoueurSuivant()">Joueur suivant</ion-button>
+          </div>
+        </div>
+    </div>
 
 
-
-<ion-grid *ngIf="zone_a_afficher == 'validation_mot'" style="height: 100%">  
-  <ion-row justify-content-center align-items-center style="height: 100%">
-      <ion-col>
-        <h2>Le mot sera ...</h2>
-        <h2>{{ListeDeMots[CurrentlocationMot].nom}}</h2>
-        <ion-button shape="round" color="info" fill="outline" (click)="ValideMot()">Valider</ion-button>  
-      </ion-col>
-    </ion-row>
-</ion-grid>
-
-
-<ion-grid *ngIf="zone_a_afficher == 'player_actif'" style="height: 100%">  
-  <ion-row justify-content-center align-items-center style="height: 100%">
-      <ion-col>
-    <h2>{{Parties[currentPartie].joueurs[currentPlayerPos].nom}}</h2>
-    <h2>A toi de jouer !</h2>
-    <ion-button shape="round" color="info" fill="outline" (click)="DisplayTextArea()">OK</ion-button>          
-    </ion-col>
-    </ion-row>
-</ion-grid>
+    <div *ngIf="zone_a_afficher == 'fin_de_manche'" style="margin-top: 50vh; transform: translateY(-50%);">
+      <div class="row">
+        <div class="col text-center">
+            <h2 style="color:white">Fin de la manche !</h2>
+            <h2 style="color:white">Repasse le téléphone à {{Parties[currentPartie].joueurs[currentMjpos].nom}}</h2>
+            <br>
+            <ion-button strong=true shape="round" color="warning" fill="outline" (click)="Vote()">Passer aux votes</ion-button>      
+        </div>
+      </div>
+    </div>
 
 
-<ion-grid *ngIf="zone_a_afficher == 'text_area'" style="height: 100%">  
-  <ion-row justify-content-center align-items-center style="height: 100%">
-    <ion-col>
-        <h2>{{Parties[currentPartie].joueurs[currentPlayerPos].nom}}</h2>
-        <h2>Définition du mot : {{ListeDeMots[CurrentlocationMot].nom}}</h2>
-        <ion-item>
-            <ion-textarea placeholder="Définition" autocorrect="on" type="text" [(ngModel)]="Parties[currentPartie].manches[currentManche-1].definitions[currentDefinition].definition"></ion-textarea>
-        </ion-item>
-        <ion-button shape="round" color="info" fill="outline" (click)="JoueurSuivant()">Joueur suivant</ion-button>          
-    </ion-col>
-  </ion-row>
-</ion-grid>
-
-
-
-
-<ion-grid *ngIf="zone_a_afficher == 'fin_de_manche'" style="height: 100%">  
-  <ion-row justify-content-center align-items-center style="height: 100%">
-      <ion-col>
-    <h2>Fin de la manche !</h2>
-    <h2>Repasse le téléphone à {{Parties[currentPartie].joueurs[currentMjpos].nom}}</h2>
-    <ion-button shape="round" color="info" fill="outline" (click)="Vote()">Passer aux votes</ion-button>      
-    </ion-col>
-    </ion-row>
-</ion-grid>
-
-
-<ion-content *ngIf="zone_a_afficher == 'vote'">
-    <ion-grid>
-         <ion-row>
-             <ion-col size="3">
-             </ion-col>
-             <ion-col size="6" center text-center>
-                 <strong><h1>C'est l'heure des votes !</h1></strong>
-             </ion-col>
-             <ion-col size="3">
-             </ion-col>
-        </ion-row>
-        <ion-row>
-             <ion-col>
-                 <h2>Séléctionne un joueur</h2>
-             </ion-col>
-        </ion-row>
-        <ion-row>
-             <ion-col *ngFor="let player of Parties[currentPartie].joueurs; index as i" >
-                <ion-button shape="round" color="info" fill="outline" *ngIf="player.id!=currentMjId" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+    <div *ngIf="zone_a_afficher == 'vote'" style="margin-top: 50vh; transform: translateY(-50%);">
+         <div class="row">
+             <div class="col text-center">
+                 <strong><h3 style="color:white">C'est l'heure des votes !</h3></strong>
+             </div>
+         </div>
+        <div class="row">
+            <div class="col text-center">
+                <h4 style="color:white">Séléctionne un joueur</h4>
+                <br>
+            </div>
+        </div>
+            <div class="row">
+             <div class="col text-center" *ngFor="let player of Parties[currentPartie].joueurs; index as i" >
+                 <ion-button strong=true shape="round" color="gray" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'gray'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="warning" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'warning'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="primary" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'primary'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="success" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'success'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="danger" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'danger'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="light" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'light'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="info" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'info'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="secondary" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'secondary'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
+                 <ion-button strong=true shape="round" color="dark" fill="outline" *ngIf="player.id!=currentMjId && player.couleur == 'dark'" (click)="VoteSelectPlayer(player.id, i)">{{player.nom}}</ion-button>
                  <div *ngFor="let def of Parties[currentPartie].manches[currentManche-1].definitions">
                      <div *ngFor="let idJoueur of def.idJoueursVotePour">
-                         <div *ngIf="idJoueur == player.id">
+                         <div *ngIf="idJoueur == player.id" style="color:white">
                              {{def.definition}}
                          </div>
                      </div>
                  </div>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-             <ion-col>
-                 <h2>Les définitions du mot : {{ListeDeMots[CurrentlocationMot].nom}}</h2>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngFor="let def of Parties[currentPartie].manches[currentManche-1].definitions; index as i">
-             <ion-col>
-                 {{def.definition}}
-            </ion-col>
-            <ion-col>
-                <ion-button shape="round" color="info" fill="outline" [disabled]="voteSelectedPlayerId==-1 || def.idJoueur==voteSelectedPlayerId" (click)="AVoter(i)">Vote</ion-button>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-             <ion-col>
-                 <ion-button shape="round" color="info" fill="outline" [disabled]="everyPlayerVote == false" (click)="ValideVote()">Valider les votes</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-</ion-content>
+             </div>
+                <br>
+            </div>
+            <div class="row">
+                 <div class="col text-center">
+                     <h2 style="color:white">Les définitions du mot : {{ListeDeMots[CurrentlocationMot].nom}}</h2>
+                </div>
+            </div>
+            <div class="row" *ngFor="let def of Parties[currentPartie].manches[currentManche-1].definitions; index as i">
+                 <div style="color:white" class="col text-center">
+                     {{def.definition}}
+                </div>
+                <div class="col text-center">
+                    <ion-button strong=true shape="round" color="light" fill="outline" [disabled]="voteSelectedPlayerId==-1 || def.idJoueur==voteSelectedPlayerId" (click)="AVoter(i)">Vote</ion-button>
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col text-center">
+                     <br>
+                     <ion-button strong=true shape="round" color="warning" fill="outline" [disabled]="everyPlayerVote == false" (click)="ValideVote()">Valider les votes</ion-button>
+                </div>
+        </div>
+    </div>
 
-<ion-content *ngIf="zone_a_afficher == 'recap_points'" >
-    <ion-grid  class="margintop20" style="height: 100%">
-         <ion-row *ngFor="let player of Parties[currentPartie].joueurs" justify-content-center align-items-center>
-             <ion-col>
-                 {{player.nom}}
-             </ion-col>
-             <ion-col>
-                 {{player.points}} points
-             </ion-col>
-        </ion-row>
-        <ion-row>
-        </ion-row>
-        <ion-row justify-content-center align-items-center>
-            <ion-col>
-                <ion-button shape="round" color="info" fill="outline" [disabled]="everyPlayerVote == false" (click)="NewRound()">Manche suivante</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-</ion-content>
+    <div *ngIf="zone_a_afficher == 'recap_points'" style="margin-top: 50vh; transform: translateY(-50%);">
+        <div class="container margintop20" style="height: 100%">
+            <div class="row">
+                <div class="col text-center" style="color:white">
+                    <h2>Classement</h2>
+                    <br>
+                </div>                
+            </div> 
+            <div class="row" *ngFor="let player of Parties[currentPartie].joueurs" >
+                 <div class="col text-center" style="color:white">
+                     {{player.nom}}
+                 </div>
+                 <div class="col text-center" style="color:white">
+                     {{player.points}} points
+                 </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col text-center">
+                    <ion-button strong=true shape="round" color="success" fill="outline" [disabled]="everyPlayerVote == false" (click)="NewRound()">Manche suivante</ion-button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<ion-content *ngIf="zone_a_afficher == 'fin_partie'" center text-center class="vertical-align-content bakcgroundColor">
-    <ion-grid style="height: 100%">
-         <ion-row *ngFor="let player of Parties[currentPartie].joueurs" justify-content-center align-items-center style="height: 100%">
-             <ion-col>
+    <div *ngIf="zone_a_afficher == 'fin_partie'" style="margin-top: 50vh; transform: translateY(-50%);">
+        <div class="col text-center" style="color:white">
+            <h2>Classement final</h2>
+            <br>
+        </div>                 
+        <div class="row" *ngFor="let player of Parties[currentPartie].joueurs">             
+             <div class="col text-center" style="color:white">
                  {{player.nom}}
-             </ion-col>
-             <ion-col>
+             </div>
+             <div class="col text-center" style="color:white">
                  {{player.points}} points
-             </ion-col>
-        </ion-row>
-        <ion-row justify-content-center align-items-center style="height: 100%">
-             <ion-col>
-                 <ion-button shape="round" color="info" fill="outline" [disabled]="everyPlayerVote == false" (click)="RetourMenu()">Retour au menu</ion-button>
-            </ion-col>
-            <ion-col>
-                 <ion-button shape="round" color="info" fill="outline" [disabled]="everyPlayerVote == false" (click)="NouvellePartie()">Nouvelle partie</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-</ion-content>
+             </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col text-center">
+                <ion-button strong=true shape="round" color="danger" fill="outline" [disabled]="everyPlayerVote == false" (click)="RetourMenu()">Retour au menu</ion-button>
+            </div>
+            <div class="col text-center">
+                <ion-button strong=true shape="round" color="light" fill="outline" [disabled]="everyPlayerVote == false" (click)="NouvellePartie()">Nouvelle partie</ion-button>
+            </div>
+        </div>
+    </div>
+</div>
